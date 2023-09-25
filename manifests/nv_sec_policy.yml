@@ -3,8 +3,8 @@ items:
 - apiVersion: neuvector.com/v1
   kind: NvSecurityRule
   metadata:
-    name: nv.webphotobook-dev.myapp-dev
-    namespace: myapp-dev
+    name: nv.webphotobook.myapp
+    namespace: myapp
   spec:
     dlp:
       settings: []
@@ -49,7 +49,7 @@ items:
     - action: allow
       applications:
       - HTTP
-      name: nv.webphotobook-dev.myapp-dev-ingress-0
+      name: nv.webphotobook.myapp-ingress-0
       ports: any
       priority: 0
       selector:
@@ -66,7 +66,7 @@ items:
     - action: allow
       applications:
       - HTTP
-      name: nv.webphotobook-dev.myapp-dev-ingress-1
+      name: nv.webphotobook.myapp-ingress-1
       ports: any
       priority: 0
       selector:
@@ -104,16 +104,11 @@ items:
         criteria:
         - key: domain
           op: =
-          value: myapp-dev
+          value: myapp
         - key: service
           op: =
-          value: webphotobook-dev.myapp-dev
-        name: nv.webphotobook-dev.myapp-dev
+          value: webphotobook.myapp
+        name: nv.webphotobook.myapp
         original_name: ""
-    waf:
-      settings:
-      - action: deny
-        name: block_API
-      status: true
 kind: List
 metadata: null
