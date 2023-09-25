@@ -16,4 +16,6 @@ spec:
   - manifests
   # This is the target namespace where the application will be deployed.
   targetNamespace: myapp
+  targets:
+    - clusterName: demo
 ...
