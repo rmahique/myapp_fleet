@@ -3,36 +3,70 @@ items:
 - apiVersion: neuvector.com/v1
   kind: NvSecurityRule
   metadata:
-    name: nv.webphotobook.myapp
-    namespace: myapp
+    name: nv.webphotobook-dev.myapp-dev
+    namespace: myapp-dev
   spec:
     dlp:
       settings: []
       status: true
-    egress: []
-    file: []
-    ingress:
+    egress:
     - action: allow
       applications:
-      - HTTP
-      name: nv.webphotobook.myapp-ingress-0
-      ports: any
+      - MySQL
+      name: nv.mysql.myapp-dev-egress-0
+      ports: tcp/3306
       priority: 0
       selector:
         comment: ""
         criteria:
         - key: service
           op: =
-          value: rke2-ingress-nginx-controller.kube-system
+          value: mysql.myapp-dev
+        - key: domain
+          op: =
+          value: myapp-dev
+        name: nv.mysql.myapp-dev
+        original_name: ""
+    - action: allow
+      applications:
+      - DNS
+      name: nv.rke2-coredns-rke2-coredns.kube-system-egress-1
+      ports: any
+      priority: 0
+      selector:
+        comment: ""
+        criteria:
         - key: domain
           op: =
           value: kube-system
+        - key: service
+          op: =
+          value: rke2-coredns-rke2-coredns.kube-system
+        name: nv.rke2-coredns-rke2-coredns.kube-system
+        original_name: ""
+    file: []
+    ingress:
+    - action: allow
+      applications:
+      - HTTP
+      name: nv.webphotobook-dev.myapp-dev-ingress-0
+      ports: any
+      priority: 0
+      selector:
+        comment: ""
+        criteria:
+        - key: domain
+          op: =
+          value: kube-system
+        - key: service
+          op: =
+          value: rke2-ingress-nginx-controller.kube-system
         name: nv.rke2-ingress-nginx-controller.kube-system
         original_name: ""
     - action: allow
       applications:
       - HTTP
-      name: nv.webphotobook.myapp-ingress-1
+      name: nv.webphotobook-dev.myapp-dev-ingress-1
       ports: any
       priority: 0
       selector:
@@ -43,12 +77,24 @@ items:
     process:
     - action: allow
       allow_update: false
+      name: ls
+      path: /usr/bin/ls
+    - action: allow
+      allow_update: false
       name: pause
       path: /pause
     - action: allow
       allow_update: false
+      name: ping
+      path: /usr/bin/ping
+    - action: allow
+      allow_update: false
       name: python3
       path: /usr/bin/python3.11
+    - action: allow
+      allow_update: false
+      name: sh
+      path: /usr/bin/bash
     process_profile:
       baseline: zero-drift
     target:
@@ -56,16 +102,18 @@ items:
       selector:
         comment: ""
         criteria:
-        - key: service
-          op: =
-          value: webphotobook.myapp
         - key: domain
           op: =
-          value: myapp
-        name: nv.webphotobook.myapp
+          value: myapp-dev
+        - key: service
+          op: =
+          value: webphotobook-dev.myapp-dev
+        name: nv.webphotobook-dev.myapp-dev
         original_name: ""
     waf:
-      settings: []
+      settings:
+      - action: deny
+        name: block_API
       status: true
 kind: List
 metadata: null
