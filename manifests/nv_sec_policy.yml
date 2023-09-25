@@ -13,7 +13,7 @@ items:
     - action: allow
       applications:
       - MySQL
-      name: nv.mysql.myapp-dev-egress-0
+      name: nv.mysql.myapp-egress-0
       ports: tcp/3306
       priority: 0
       selector:
@@ -21,11 +21,11 @@ items:
         criteria:
         - key: service
           op: =
-          value: mysql.myapp-dev
+          value: mysql.myapp
         - key: domain
           op: =
-          value: myapp-dev
-        name: nv.mysql.myapp-dev
+          value: myapp
+        name: nv.mysql.myapp
         original_name: ""
     - action: allow
       applications:
